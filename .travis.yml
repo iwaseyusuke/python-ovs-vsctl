@@ -1,0 +1,26 @@
+language: python
+python:
+  - "3.5"
+
+env:
+  - TOX_ENV=py27
+  - TOX_ENV=py34
+  - TOX_ENV=py35
+  - TOX_ENV=pep8
+  - TOX_ENV=pylint
+
+services:
+  - docker
+
+install:
+  - docker build -t mininet tests/docker/mininet/
+  - CID=`docker run --privileged -t -d mininet`; docker rm -f $CID
+  - pip install tox coveralls
+
+script:
+  - tox -e $TOX_ENV
+
+after_success:
+  - coveralls
+
+sudo: required

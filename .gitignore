@@ -1,0 +1,8 @@
+*.py[co]
+.tox/
+.coverage
+cover/
+doc/build/
+
+# For editors
+.idea/
