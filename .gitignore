@@ -6,3 +6,8 @@ doc/build/
 
 # For editors
 .idea/
+.eggs/
+AUTHORS
+ChangeLog
+build/
+python_ovs_vsctl.egg-info/
