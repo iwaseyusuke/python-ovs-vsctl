@@ -3,6 +3,11 @@
 .coverage
 cover/
 doc/build/
+.eggs/
+AUTHORS
+ChangeLog
+build/
+python_ovs_vsctl.egg-info/
 
 # For editors
 .idea/

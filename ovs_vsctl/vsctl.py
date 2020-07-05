@@ -37,25 +37,25 @@ class VSCtl(object):
     """
     Runner class for 'ovs-vsctl' command.
 
-    :param protocol: `'tcp'` or `'ssl'` is available.
-    :param ip_addr: IP address of switch to connect.
+    :param protocol: `'tcp'`, `'ssl'`, and `'unix'` are available.
+    :param addr: IP address of switch to connect.
     :param port: (TCP or SSL) port number to connect.
     :raise: * ValueError -- When the given parameter is invalid.
     """
-    SUPPORTED_PROTOCOLS = ['tcp', 'ssl']
+    SUPPORTED_PROTOCOLS = ['tcp', 'ssl', 'unix']
     SUPPORTED_FORMATS = ['json']
 
-    def __init__(self, protocol='tcp', ip_addr='127.0.0.1', port=6640):
+    def __init__(self, protocol='tcp', addr='127.0.0.1', port=6640):
         # Validates the given protocol.
         if protocol not in self.SUPPORTED_PROTOCOLS:
             raise ValueError('Unsupported protocol: %s' % protocol)
         self.protocol = protocol
 
         # Validates the given IP address.
-        if (not netaddr.valid_ipv4(ip_addr)
-                and not netaddr.valid_ipv6(ip_addr)):
-            raise ValueError('Invalid IP address: %s' % ip_addr)
-        self.ip_addr = ip_addr
+        if (self.protocol != "unix" and not netaddr.valid_ipv4(addr)
+                and not netaddr.valid_ipv6(addr)):
+            raise ValueError('Invalid IP address: %s' % addr)
+        self.addr = addr
 
         # Validates the given port number.
         try:
@@ -81,11 +81,13 @@ class VSCtl(object):
 
         :return: OVSDB server address.
         """
-        if ':' in self.ip_addr:
+        if self.protocol == 'unix':
+            return '%s:%s' % (self.protocol, self.addr)
+        if ':' in self.addr:
             # If ip is an IPv6 address, then wrap ip with square brackets.
-            return '%s:[%s]:%d' % (self.protocol, self.ip_addr, self.port)
-        else:
-            return '%s:%s:%d' % (self.protocol, self.ip_addr, self.port)
+            return '%s:[%s]:%d' % (self.protocol, self.addr, self.port)
+
+        return '%s:%s:%d' % (self.protocol, self.addr, self.port)
 
     def run(self, command, table_format='list', data_format='string',
             parser=None):
