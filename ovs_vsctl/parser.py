@@ -115,7 +115,7 @@ def _record_value_parser(buf):
     return value
 
 
-class Record(object):  # pylint: disable=too-few-public-methods
+class Record():  # pylint: disable=too-few-public-methods
     """
     Record object of OVSDB table.
 

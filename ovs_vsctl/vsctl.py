@@ -33,7 +33,7 @@ INSTALLED_OVS_VSCTL = find_executable("ovs-vsctl")
 DEFAULT_OVS_VSCTL = '%s/bin/ovs-vsctl' % path.dirname(__file__)
 
 
-class VSCtl(object):
+class VSCtl():
     """
     Runner class for 'ovs-vsctl' command.
 
